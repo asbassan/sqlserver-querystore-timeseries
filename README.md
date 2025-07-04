@@ -29,10 +29,10 @@ The project lays the foundation for proactive workload management in SQL Server,
 
 ## Repository Contents
 
-- [`load_simulation.sql`](load_simulation.sql)  
+- [`load_simulation.sql`](Load_Simulation.sql)  
   Simulates a synthetic CRM-like workload against a dedicated SQL Server database, generating time series data with plan bloat, forced plans, and random gaps.
 
-- [`load_verification.sql`](load_verification.sql)  
+- [`load_verification.sql`](Load_Verification.sql)  
   Verifies the generated dataset, checking for required time series length, gap distribution, plan variant diversity, and other key metrics to ensure suitability for TSA research.
 
 ---
