@@ -1,67 +1,81 @@
 # sqlserver-querystore-timeseries
-
-**A Novel Simulation Framework for Time Series Analysis and Forecasting in SQL Server Query Store Workloads**
+## A Novel Simulation Framework for Time Series Analysis and Forecasting in SQL Server Query Store Workloads
 
 ---
 
 ## Overview
 
-This repository provides a robust simulation environment and verification toolkit for generating and analyzing synthetic time series data derived from SQL Server Query Store. It is designed to enable experimentation with forecasting, anomaly detection, and workload prediction on realistic, plan-diverse, and gap-rich query workloads.
+This repository provides a comprehensive simulation environment and verification toolkit for generating and analyzing realistic synthetic time series data derived from SQL Server Query Store. The framework is designed to facilitate experimentation with forecasting, anomaly detection, and workload prediction on richly patterned, plan-diverse, and gap-containing query workloads.
 
-The project lays the foundation for proactive workload management in SQL Server, illustrating how Query Store's time series data can be used not just for reactive diagnostics, but also for predictive analytics and research into workload forecasting.
+It establishes a reproducible foundation for proactive workload management in SQL Server, showcasing how Query Store time series data can be leveraged not just for diagnostics, but also for advanced predictive analytics and research.
 
 ---
 
 ## Features
 
-- **Synthetic Workload Simulation:**  
-  Generates Orders, OrderDetails, and rich query mix with random gaps, plan bloat, forced plans, and high plan diversity.
-- **Gap Realism:**  
-  Simulates random, independent missing intervals per entity to mimic real-world ETL failures/delays.
-- **Advanced Query Features:**  
-  Exercises plan cache, plan regression, and plan forcing for robust Query Store data.
-- **Restartable & Reproducible:**  
-  Designed to safely resume or rerun with parameterized settings.
-- **Verification Script:**  
-  Ensures the generated dataset has the characteristics (length, continuity, gaps, diversity) needed for time series analysis (TSA).
+### Synthetic Workload Simulation
+- **Realistic Patterns:** Simulates 20 days of hourly data for multiple queries and variants, with daily/weekly seasonality, business-hour bursts, organic drift, and events such as deployments, plan regressions, and outliers.
+- **Plan Diversity:** Models multiple query hashes (`QueryName`) and variants (`QueryVariant`), each with distinct behaviors and regression windows.
+- **Correlated Metrics:** Generates CPU, Latency, and Logical Reads with realistic mathematical relationships.
+- **Controlled Missingness:** Injects both random and clustered gaps, as well as correlated missing data, to mimic real-world telemetry and sensor failures.
+
+### Gap Realism and Data Quality
+- **Random and Clustered Gaps:** Probabilities are tuned to provide a realistic mix of mostly complete data with rare, but present gaps—allowing for meaningful TSA and anomaly research.
+- **Outage Simulation:** Specific outage periods and random data loss help test algorithm robustness.
+
+### Verification Script
+- **Automated Data Health Checks:** Verifies the generated dataset with summary statistics, null ratios, gap counts, diversity, and plan regression presence.
+- **Suitability for TSA:** Ensures the data is appropriate for time series analysis, forecasting, and anomaly detection.
+
+### Reproducibility and Extensibility
+- **Deterministic Randomness:** All simulations are seeded for reproducibility.
+- **Parameterizable:** Easy to tune number of queries, gap probabilities, anomaly injection, and more for different research scenarios.
+- **Extensible:** Framework is designed to be a solid, modifiable starting point for further research into query performance, gap handling, and advanced TSA.
 
 ---
 
 ## Repository Contents
 
-- [`load_simulation.sql`](Load_Simulation.sql)  
-  Simulates a synthetic CRM-like workload against a dedicated SQL Server database, generating time series data with plan bloat, forced plans, and random gaps.
+- `load_simulation.sql`  
+  Simulates a synthetic workload against SQL Server, producing time series data with plan drift, forced plans, events, and random/clustered gaps. The workload covers multiple queries and variants, and is suitable for TSA research.
 
-- [`load_verification.sql`](Load_Verification.sql)  
-  Verifies the generated dataset, checking for required time series length, gap distribution, plan variant diversity, and other key metrics to ensure suitability for TSA research.
+- `load_verification.sql`  
+  Verifies the generated time series dataset, reporting on length, gap distribution, plan diversity, event coverage, and overall data health. Output is designed to be pasted directly into research reports.
+
+- `Section5_Data_Analysis_Notebook.ipynb`  
+  (Recommended) Python notebook for downstream analysis, including dataset verification, exploratory analysis, and comparative forecasting with ARIMA, LSTM, Prophet, Random Forest, and XGBoost.
+
+- `load_simulation_master_document.md`  
+  Detailed documentation of the simulation framework, its logic, and research motivations.
 
 ---
 
 ## Getting Started
 
 ### 1. Prerequisites
-
-- Microsoft SQL Server 2019 or later (with Query Store enabled)
-- Sufficient disk space for the database files (default: 20 GiB data, 8 GiB log)
-- Permissions to create, modify, and drop databases
+- Microsoft SQL Server 2019 or later (Query Store enabled)
+- Sufficient disk space for the database files
+- Permissions to create/modify tables and run scripts
 
 ### 2. Usage
 
-#### **A. Run the Simulation**
+#### A. Run the Simulation
+- Open `load_simulation.sql` in SQL Server Management Studio (SSMS) or Azure Data Studio.
+- Adjust top-level parameters (days, gap probabilities, etc.) if desired.
+- Execute the script to generate the synthetic workload with realistic gaps and plan diversity.
 
-1. Open `load_simulation.sql` in SQL Server Management Studio or your preferred SQL tool.
-2. Adjust parameters at the top of the script if needed (simulation days, gap probability, etc.).
-3. Execute the script.  
-   - This will create `CRMForecastDemo` database, populate Orders, OrderDetails, WorkloadMetrics, and simulate realistic gaps and query plan diversity.
+#### B. Verify the Data
+- After simulation, open `load_verification.sql` in the same database.
+- Execute the script.
+- Review the output for:
+  - Total rows and time coverage
+  - Gap/plan regression counts
+  - Null ratios and data health
+  - Suitability for TSA and anomaly detection
 
-#### **B. Verify the Data**
-
-1. After simulation completes, open `load_verification.sql`.
-2. Execute the script in the same database context.
-3. Review the output to confirm:
-   - Time series length is sufficient for your TSA experiments
-   - Gaps and plan variants are present as expected
-   - Metrics are consistent with experimental aims
+#### C. Export for Analysis
+- Export the `SimulatedQueryMetrics` table as CSV (see script or use SSMS “Save Results As…”).
+- Use the provided Python notebook for downstream analysis and model benchmarking.
 
 ---
 
@@ -71,7 +85,8 @@ The project lays the foundation for proactive workload management in SQL Server,
 - **Anomaly Detection on Query Performance Metrics**
 - **Proactive Query Optimization and Plan Management**
 - **Benchmarking Model Suitability for Different Workload Patterns**
-- **Exploring Overlap Between Time Series Analysis and Reinforcement Learning in DBMS Contexts**
+- **Exploring Data Gaps, Outages, and Robustness in TSA**
+- **Reinforcement Learning and Self-Driving DBMS Research**
 
 ---
 
@@ -86,18 +101,16 @@ If you use this repository or its methodology in your research, please cite:
 
 ## License
 
-MIT License (see [LICENSE](LICENSE))
+MIT License (see LICENSE)
 
 ---
 
 ## Acknowledgements
 
-This repository and methodology were inspired by the need for reproducible, realistic, and diverse time series datasets for SQL Server Query Store research. For context and further reading, see [this blog post on ETL failure rates](https://datacater.io/blog/how-to-handle-etl-failures/).
+This repository and methodology were inspired by the need for reproducible, realistic, and diverse time series datasets for SQL Server Query Store research. See `load_simulation_master_document.md` for a detailed discussion of simulation design, rationale, and future directions.
 
 ---
 
 ## Contributions
 
 Contributions and suggestions for extending the simulation, integrating new verification metrics, or supporting additional DBMS platforms are welcome. Please open an issue or submit a pull request.
-
----
