@@ -6,7 +6,7 @@ This repository provides a fully reproducible framework for benchmarking state-o
 
 **Title:** Benchmarking Time Series Forecasting Models on Synthetic, Operationally-Augmented SQL Server Query Telemetry  
 **Authors:** [A.S. Bassan](https://github.com/asbassan)  
-**PDF:** [`Benchmarking_Time_Series_Forecasting_Models_on_Synthetic__Operationally_Augmented_SQL_Server_Query_Telemetry (6).pdf`](Benchmarking_Time_Series_Forecasting_Models_on_Synthetic__Operationally_Augmented_SQL_Server_Query_Telemetry%20(6).pdf)
+
 
 ---
 
